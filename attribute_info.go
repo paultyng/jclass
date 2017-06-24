@@ -22,6 +22,14 @@ func (i *AttributeInfo) NameString() string {
 	return ((*ConstantUtf8Info)(i.cp[i.NameIndex])).Utf8()
 }
 
+func (i *AttributeInfo) SignatureIndex() uint16 {
+	return binary.BigEndian.Uint16(i.Info)
+}
+
+func (i *AttributeInfo) SignatureString() string {
+	return ((*ConstantUtf8Info)(i.cp[i.SignatureIndex()])).Utf8()
+}
+
 func NewAttributeInfo(r io.Reader, buf []byte, cp []*ConstantPoolInfo) (*AttributeInfo, []byte, error) {
 	rs := AttributeInfo{}
 	byteOrder := binary.BigEndian
