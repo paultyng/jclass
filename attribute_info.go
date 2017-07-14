@@ -22,6 +22,10 @@ func (i *AttributeInfo) NameString() string {
 	return ((*ConstantUtf8Info)(i.cp[i.NameIndex])).Utf8()
 }
 
+func (a *AttributeInfo) ConstantPoolInfo(i uint16) *ConstantPoolInfo {
+	return a.cp[int(i)]
+}
+
 func NewAttributeInfo(r io.Reader, buf []byte, cp []*ConstantPoolInfo) (*AttributeInfo, []byte, error) {
 	rs := AttributeInfo{}
 	byteOrder := binary.BigEndian

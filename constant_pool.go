@@ -61,16 +61,6 @@ func (i *ConstantPoolInfo) String() string {
 	}
 }
 
-func readEnoughBytes(info *ConstantPoolInfo, r io.Reader, buf []byte, n int) error {
-	_, err := io.ReadFull(r, buf[:n])
-	if err != nil {
-		return err
-	}
-	info.Info = make([]byte, n)
-	copy(info.Info, buf)
-	return nil
-}
-
 func NewConstantPoolInfo(r io.Reader, buf []byte) (*ConstantPoolInfo, []byte, error) {
 	rs := ConstantPoolInfo{}
 
@@ -82,19 +72,19 @@ func NewConstantPoolInfo(r io.Reader, buf []byte) (*ConstantPoolInfo, []byte, er
 	rs.Tag = buf[0]
 	switch rs.Tag {
 	case 7, 8, 16:
-		err = readEnoughBytes(&rs, r, buf, 2)
+		rs.Info, err = readEnoughBytes(r, buf, 2)
 		if err != nil {
 			return nil, buf, err
 		}
 
 	case 3, 4, 9, 10, 11, 12, 18:
-		err = readEnoughBytes(&rs, r, buf, 4)
+		rs.Info, err = readEnoughBytes(r, buf, 4)
 		if err != nil {
 			return nil, buf, err
 		}
 
 	case 5, 6:
-		err = readEnoughBytes(&rs, r, buf, 8)
+		rs.Info, err = readEnoughBytes(r, buf, 8)
 		if err != nil {
 			return nil, buf, err
 		}
@@ -122,13 +112,13 @@ func NewConstantPoolInfo(r io.Reader, buf []byte) (*ConstantPoolInfo, []byte, er
 		copy(rs.Info, buf)
 
 	case 15:
-		err = readEnoughBytes(&rs, r, buf, 3)
+		rs.Info, err = readEnoughBytes(r, buf, 3)
 		if err != nil {
 			return nil, buf, err
 		}
 
 	default:
-		panic(fmt.Errorf("invalid tag: %d", rs.Tag))
+		panic(fmt.Errorf("invalid constant pool tag: %d", rs.Tag))
 	}
 
 	return &rs, buf, nil
