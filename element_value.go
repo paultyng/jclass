@@ -65,6 +65,10 @@ type ElementValuePair struct {
 	cp []*ConstantPoolInfo
 }
 
+func (evp *ElementValuePair) ElementNameString() string {
+	return ((*ConstantUtf8Info)(evp.cp[evp.ElementNameIndex])).Utf8()
+}
+
 func (evp *ElementValuePair) ConstantPoolInfo(i uint16) *ConstantPoolInfo {
 	return evp.cp[int(i)]
 }
