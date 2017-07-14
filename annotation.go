@@ -46,7 +46,7 @@ func NewAnnotation(r io.Reader, buf []byte, cp []*ConstantPoolInfo) (*Annotation
 		if err != nil {
 			return nil, buf, err
 		}
-		rs.ElementValuePairs = append(rs.ElementValuePairs, evp)
+		rs.ElementValuePairs[i] = evp
 	}
 	return &rs, buf, err
 }

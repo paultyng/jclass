@@ -72,7 +72,7 @@ func NewAttributeInfo(r io.Reader, buf []byte, cp []*ConstantPoolInfo) (*Attribu
 			if err != nil {
 				return nil, buf, err
 			}
-			rs.Annotations = append(rs.Annotations, ann)
+			rs.Annotations[i] = ann
 		}
 	}
 
