@@ -22,7 +22,9 @@ func (a *Annotation) ConstantPoolInfo(i uint16) *ConstantPoolInfo {
 }
 
 func NewAnnotation(r io.Reader, buf []byte, cp []*ConstantPoolInfo) (*Annotation, []byte, error) {
-	rs := Annotation{}
+	rs := Annotation{
+		cp: cp,
+	}
 	byteOrder := binary.BigEndian
 
 	_, err := io.ReadFull(r, buf[:2])
@@ -46,7 +48,5 @@ func NewAnnotation(r io.Reader, buf []byte, cp []*ConstantPoolInfo) (*Annotation
 		}
 		rs.ElementValuePairs = append(rs.ElementValuePairs, evp)
 	}
-
-	rs.cp = cp
 	return &rs, buf, err
 }
