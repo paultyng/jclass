@@ -7,11 +7,11 @@ import (
 )
 
 type ElementValue struct {
-	Tag  string
-	Info []byte
+	Tag               string
+	Info              []byte
+	ConstantPoolIndex uint16
 
-	cpi uint16
-	cp  []*ConstantPoolInfo
+	cp []*ConstantPoolInfo
 }
 
 func (ev *ElementValue) ConstantPoolInfo(i uint16) *ConstantPoolInfo {
@@ -50,7 +50,7 @@ func NewElementValue(r io.Reader, buf []byte, cp []*ConstantPoolInfo) (*ElementV
 		if err != nil {
 			return nil, buf, err
 		}
-		rs.cpi = byteOrder.Uint16(buf)
+		rs.ConstantPoolIndex = byteOrder.Uint16(buf)
 	default:
 		panic(fmt.Errorf("invalid element value tag: %s", rs.Tag))
 	}
