@@ -13,6 +13,10 @@ type Annotation struct {
 	cp []*ConstantPoolInfo
 }
 
+func (a *Annotation) TypeString() string {
+	return ((*ConstantUtf8Info)(a.cp[a.TypeIndex])).Utf8()
+}
+
 func (a *Annotation) ConstantPoolInfo(i uint16) *ConstantPoolInfo {
 	return a.cp[int(i)]
 }
