@@ -74,7 +74,9 @@ func (evp *ElementValuePair) ConstantPoolInfo(i uint16) *ConstantPoolInfo {
 }
 
 func NewElementValuePair(r io.Reader, buf []byte, cp []*ConstantPoolInfo) (*ElementValuePair, []byte, error) {
-	rs := ElementValuePair{}
+	rs := ElementValuePair{
+		cp: cp,
+	}
 	byteOrder := binary.BigEndian
 
 	_, err := io.ReadFull(r, buf[:2])
