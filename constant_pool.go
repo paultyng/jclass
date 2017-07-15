@@ -4,7 +4,6 @@ import (
 	"encoding/binary"
 	"fmt"
 	"io"
-	"unicode/utf16"
 )
 
 type ConstantPoolInfo struct {
@@ -266,36 +265,7 @@ func (i *ConstantUtf8Info) Bytes() []byte {
 }
 
 func (info *ConstantUtf8Info) Utf8() string {
-	ch := make([]uint16, 0, 512)
-	var c, cc uint16
-	buf := info.Info[2:]
-	var st int
-
-	for i, length := 0, len(buf); i < length; i++ {
-		c = uint16(buf[i])
-		switch st {
-		case 0:
-			if c < 0x80 {
-				ch = append(ch, c)
-			} else if c < 0xE0 && c > 0xBF {
-				cc = c & 0x1F
-				st = 1
-			} else {
-				cc = c & 0x0F
-				st = 2
-			}
-
-		case 1:
-			ch = append(ch, (cc<<6)|(c&0x3F))
-			st = 0
-
-		case 2:
-			cc = (cc << 6) | (c & 0x3F)
-			st = 1
-		}
-	}
-
-	return string(utf16.Decode(ch))
+	return string(info.Info[2:])
 }
 
 func (i *ConstantUtf8Info) String() string {
